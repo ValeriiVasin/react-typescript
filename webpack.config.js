@@ -1,3 +1,5 @@
+const webpack = require('webpack');
+
 module.exports = {
   resolve: {
     // .js is required for react imports.
@@ -9,12 +11,19 @@ module.exports = {
     loaders: [{
       // Set up ts-loader for .ts/.tsx files and exclude any imports from node_modules.
       test: /\.tsx?$/,
-      loader: 'ts-loader',
+      loaders: ['react-hot-loader/webpack', 'ts-loader'],
       exclude: /node_modules/
     }]
   },
+  plugins: [
+    new webpack.HotModuleReplacementPlugin()
+  ],
   entry: {
     // Set index.tsx as application entry point.
-    app: './index.tsx'
+    app: [
+      'webpack-dev-server/client?http://localhost:8080/', // WebpackDevServer host and port
+      'webpack/hot/only-dev-server', // "only" prevents reload on syntax errors
+      './index.tsx'
+    ]
   }
 };
